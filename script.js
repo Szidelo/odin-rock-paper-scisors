@@ -35,17 +35,19 @@ function getComputerChoice() {
 }
 
 function getHumanChoice(userAnswer) {
+	let formattedAnswer = userAnswer.toLowerCase().trim();
+
 	if (
-		userAnswer.toLowerCase() !== "rock" &&
-		userAnswer.toLowerCase() !== "paper" &&
-		userAnswer.toLowerCase() !== "scissors"
+		formattedAnswer !== "rock" &&
+		formattedAnswer !== "paper" &&
+		formattedAnswer !== "scissors"
 	) {
 		alert(
-			`your answer: ${userAnswer.toLowerCase()}. should be either rock, paper or scissors`
+			`your answer: ${formattedAnswer}. should be either rock, paper or scissors`
 		);
 		return null;
 	}
-	return userAnswer.toLowerCase();
+	return formattedAnswer;
 }
 
 function handleScore(userPoints, computerPoints) {
