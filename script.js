@@ -29,6 +29,8 @@ function getComputerChoice() {
 			break;
 	}
 
+	alert(`Computer choose ${choice}`);
+
 	return choice;
 }
 
@@ -59,7 +61,7 @@ function playGame() {
 	function playRound(humanChoice, computerChoice) {
 		let message = "";
 		if (humanChoice === computerChoice) {
-			return `it is a draw! Both choose ${humanChoice}. Play again!`;
+			message = `it is a draw! Both choose ${humanChoice}. Play again!`;
 		}
 
 		switch (humanChoice) {
@@ -104,4 +106,24 @@ function playGame() {
 
 for (let i = 1; i <= numberOfRounds; i++) {
 	playGame();
+
+	if (i === numberOfRounds) {
+		let winner;
+
+		if (userScore === computerScore) {
+			console.log(
+				`It is a draw! Final score => user: ${userScore} | computer: ${computerScore} `
+			);
+		}
+
+		if (userScore > computerScore) {
+			winner = "user";
+		} else {
+			winner = "computer";
+		}
+
+		if (winner) {
+			console.log(`The winner is: ${winner}`);
+		}
+	}
 }
