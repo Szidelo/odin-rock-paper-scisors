@@ -50,7 +50,7 @@ function getHumanChoice(userAnswer) {
 	return formattedAnswer;
 }
 
-function handleScore(userPoints, computerPoints) {
+function getScore(userPoints, computerPoints) {
 	console.log(`SCORE => User: ${userPoints} | Computer: ${computerPoints}`);
 }
 
@@ -96,7 +96,7 @@ function playGame() {
 				break;
 		}
 
-		handleScore(userScore, computerScore);
+		getScore(userScore, computerScore);
 
 		return message;
 	}
@@ -106,26 +106,34 @@ function playGame() {
 	console.log(roundResult);
 }
 
+function getFinalResult() {
+	let winner = "";
+
+	if (userScore === computerScore) {
+		console.log(
+			`It is a draw! Final score => user: ${userScore} | computer: ${computerScore} `
+		);
+	}
+
+	if (userScore > computerScore) {
+		winner = "user";
+	} else if (userScore < computerScore) {
+		winner = "computer";
+	}
+
+	if (winner) {
+		console.log(
+			`The winner is: ${winner} with ${
+				winner === "user" ? userScore : computerScore
+			} points.`
+		);
+	}
+}
+
 for (let i = 1; i <= numberOfRounds; i++) {
 	playGame();
 
 	if (i === numberOfRounds) {
-		let winner;
-
-		if (userScore === computerScore) {
-			console.log(
-				`It is a draw! Final score => user: ${userScore} | computer: ${computerScore} `
-			);
-		}
-
-		if (userScore > computerScore) {
-			winner = "user";
-		} else {
-			winner = "computer";
-		}
-
-		if (winner) {
-			console.log(`The winner is: ${winner}`);
-		}
+		getFinalResult();
 	}
 }
