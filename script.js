@@ -34,8 +34,8 @@ function getComputerChoice() {
 	return choice;
 }
 
-function getHumanChoice(userAnswer) {
-	let formattedAnswer = userAnswer.toLowerCase().trim();
+function getHumanChoice(answer) {
+	let formattedAnswer = answer.toLowerCase().trim();
 
 	if (
 		formattedAnswer !== "rock" &&
