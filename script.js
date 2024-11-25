@@ -8,7 +8,7 @@
 // 5.3 return the message with winner and increment the score for the winner
 // 6 a game function to play n number of rounds. number of rounds will be a parameter for the game function
 
-let numberOfRounds = parseInt(prompt("How many rounds do you want to play?"));
+// let numberOfRounds = parseInt(prompt("How many rounds do you want to play?"));
 
 let userScore = 0;
 let computerScore = 0;
