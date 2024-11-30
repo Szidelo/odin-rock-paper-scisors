@@ -1,15 +1,3 @@
-// 1. A input from user
-// 2. A function that returns randomly a string of value rock, paper or scissors
-// 3. A function that checks if the user in put is either rock, paper or scissors
-// 4. The program should keep track of user and computer score
-// 5. A function that play a single round.
-// 5.1 the function should take humanChoice and computerChoice as arguments and compare them
-// 5.2 write logic paper beats rock, rock beats scissors and scissors beats paper
-// 5.3 return the message with winner and increment the score for the winner
-// 6 a game function to play n number of rounds. number of rounds will be a parameter for the game function
-
-// let numberOfRounds = parseInt(prompt("How many rounds do you want to play?"));
-
 const GAME_SELECTIONS = {
 	ROCK: "rock",
 	PAPER: "paper",
@@ -27,9 +15,6 @@ let hostScore = 0;
 let roundMessage = "";
 
 const gameContainer = document.querySelector("#game");
-const paper = document.querySelector("#paper");
-const scissors = document.querySelector("#scissors");
-const rock = document.querySelector("#rock");
 const itemList = document.querySelectorAll(".item");
 const userScoreElement = document.querySelector("#user-score");
 const hostScoreElement = document.querySelector("#host-score");
@@ -55,8 +40,8 @@ const getComputerChoice = () => {
 };
 
 const getHumanChoice = (event) => {
-	const answer = event.currentTarget.id;
-	return answer;
+	const choice = event.currentTarget.id;
+	return choice;
 };
 
 const handleHumanSelection = (selectedItem) => {
@@ -80,6 +65,8 @@ const handleHumanSelection = (selectedItem) => {
 
 	const humanLabel = document.createElement("h3");
 	const computerLabel = document.createElement("h3");
+	humanLabel.classList.add("text-label");
+	computerLabel.classList.add("text-label");
 	humanLabel.textContent = "you picked:";
 	computerLabel.textContent = "the host picked:";
 	selectedElement.parentElement.insertBefore(humanLabel, selectedElement);
@@ -140,10 +127,25 @@ const handleRoundWinner = (userSelection, computerSelection) => {
 	hostScoreElement.textContent = hostScore;
 };
 
-const playRound = (e) => {
+const handleNextRound = () => {
+	const dynamicBlock = document.querySelector("#dynamic-block");
+	const gameInfoElement = document.querySelector(".round-info");
+	const textLabels = document.querySelectorAll(".text-label");
+
+	gameContainer.removeChild(dynamicBlock);
+	gameContainer.removeChild(gameInfoElement);
+
+	itemList.forEach((item) => {
+		item.parentElement.removeAttribute("style");
+	});
+
+	textLabels.forEach((label) => {
+		label.parentElement.removeChild(label);
+	});
+};
+
+const playRound = (humanSelection, computerSelection) => {
 	const TIME_IN_MILLISECONDS = 1000;
-	const humanSelection = getHumanChoice(e);
-	const computerSelection = getComputerChoice();
 	console.log("human selection:", humanSelection);
 	console.log("computer selection:", computerSelection);
 
@@ -152,9 +154,36 @@ const playRound = (e) => {
 		setTimeout(() => {
 			handleComputerSelection(computerSelection);
 			handleRoundWinner(humanSelection, computerSelection);
+
+			const gameInfoElement = document.createElement("div");
+			const messageText = document.createElement("h4");
+			const button = document.createElement("button");
+			const lastChild = document.querySelector("#dynamic-block");
+
+			button.textContent = "play again";
+			messageText.textContent = roundMessage;
+			gameInfoElement.classList.add("item-block");
+			gameInfoElement.classList.add("round-info");
+			gameInfoElement.appendChild(messageText);
+			gameInfoElement.appendChild(button);
+			gameContainer.insertBefore(gameInfoElement, lastChild);
+
+			button.addEventListener("click", handleNextRound);
 		}, TIME_IN_MILLISECONDS);
 	}, TIME_IN_MILLISECONDS);
 };
+
+const playGame = () => {
+	itemList.forEach((item) => {
+		item.addEventListener("click", function (e) {
+			const humanSelection = getHumanChoice(e);
+			const computerSelection = getComputerChoice();
+			playRound(humanSelection, computerSelection);
+		});
+	});
+};
+
+playGame();
 
 // function getScore(userPoints, computerPoints) {
 // 	console.log(`SCORE => User: ${userPoints} | Computer: ${computerPoints}`);
@@ -243,9 +272,3 @@ const playRound = (e) => {
 // 		getFinalResult();
 // 	}
 // }
-
-itemList.forEach((item) => {
-	item.addEventListener("click", function (e) {
-		playRound(e);
-	});
-});
