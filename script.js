@@ -13,6 +13,7 @@ const ROUND_MESSAGES = {
 let userScore = 0;
 let hostScore = 0;
 let roundMessage = "";
+let isRoundActive = false;
 
 const gameContainer = document.querySelector("#game");
 const itemList = document.querySelectorAll(".item");
@@ -67,8 +68,8 @@ const handleHumanSelection = (selectedItem) => {
 	const computerLabel = document.createElement("h3");
 	humanLabel.classList.add("text-label");
 	computerLabel.classList.add("text-label");
-	humanLabel.textContent = "you picked:";
-	computerLabel.textContent = "the host picked:";
+	humanLabel.textContent = "you picked";
+	computerLabel.textContent = "the host picked";
 	selectedElement.parentElement.insertBefore(humanLabel, selectedElement);
 	emptyBlock.insertBefore(computerLabel, emptyImage);
 };
@@ -145,37 +146,40 @@ const handleNextRound = () => {
 };
 
 const playRound = (humanSelection, computerSelection) => {
-	const TIME_IN_MILLISECONDS = 1000;
-	console.log("human selection:", humanSelection);
-	console.log("computer selection:", computerSelection);
+	const TIME_IN_MILLISECONDS = 500;
 
+	isRoundActive = true;
+
+	handleHumanSelection(humanSelection);
 	setTimeout(() => {
-		handleHumanSelection(humanSelection);
-		setTimeout(() => {
-			handleComputerSelection(computerSelection);
-			handleRoundWinner(humanSelection, computerSelection);
+		handleComputerSelection(computerSelection);
+		handleRoundWinner(humanSelection, computerSelection);
 
-			const gameInfoElement = document.createElement("div");
-			const messageText = document.createElement("h4");
-			const button = document.createElement("button");
-			const lastChild = document.querySelector("#dynamic-block");
+		const gameInfoElement = document.createElement("div");
+		const messageText = document.createElement("h4");
+		const button = document.createElement("button");
+		const lastChild = document.querySelector("#dynamic-block");
 
-			button.textContent = "play again";
-			messageText.textContent = roundMessage;
-			gameInfoElement.classList.add("item-block");
-			gameInfoElement.classList.add("round-info");
-			gameInfoElement.appendChild(messageText);
-			gameInfoElement.appendChild(button);
-			gameContainer.insertBefore(gameInfoElement, lastChild);
+		button.textContent = "play again";
+		messageText.textContent = roundMessage;
+		gameInfoElement.classList.add("item-block");
+		gameInfoElement.classList.add("round-info");
+		gameInfoElement.appendChild(messageText);
+		gameInfoElement.appendChild(button);
+		gameContainer.insertBefore(gameInfoElement, lastChild);
 
-			button.addEventListener("click", handleNextRound);
-		}, TIME_IN_MILLISECONDS);
+		button.addEventListener("click", () => {
+			handleNextRound();
+			isRoundActive = false;
+		});
 	}, TIME_IN_MILLISECONDS);
 };
 
 const playGame = () => {
 	itemList.forEach((item) => {
 		item.addEventListener("click", function (e) {
+			if (isRoundActive) return;
+
 			const humanSelection = getHumanChoice(e);
 			const computerSelection = getComputerChoice();
 			playRound(humanSelection, computerSelection);
@@ -184,91 +188,3 @@ const playGame = () => {
 };
 
 playGame();
-
-// function getScore(userPoints, computerPoints) {
-// 	console.log(`SCORE => User: ${userPoints} | Computer: ${computerPoints}`);
-// }
-
-// function playGame() {
-// 	const userAnswer = prompt("Rock, Paper or Scissors?");
-
-// 	const humanSelection = getHumanChoice(userAnswer);
-// 	const computerSelection = getComputerChoice();
-
-// 	function playRound(humanChoice, computerChoice) {
-// 		let message = "";
-// 		if (humanChoice === computerChoice) {
-// 			message = `it is a draw! Both choose ${humanChoice}. Play again!`;
-// 		}
-
-// switch (humanChoice) {
-// 	case "paper":
-// 		if (computerChoice === "rock") {
-// 			message = "You Won! Paper beats rock!";
-// 			userScore++;
-// 		} else {
-// 			message = "You lost! Scissors beats paper!";
-// 			computerScore++;
-// 		}
-// 		break;
-// 	case "rock":
-// 		if (computerChoice === "scissors") {
-// 			message = "You Won! rock beats scissors!";
-// 			userScore++;
-// 		} else {
-// 			message = "You lost! Paper beats rock!";
-// 			computerScore++;
-// 		}
-// 		break;
-// 	case "scissors":
-// 		if (computerChoice === "paper") {
-// 			message = "You Won! scissors beats paper!";
-// 			userScore++;
-// 		} else {
-// 			message = "You lost! Rock beats scissors!";
-// 			computerScore++;
-// 		}
-// 		break;
-// }
-
-// 		getScore(userScore, computerScore);
-
-// 		return message;
-// 	}
-
-// 	let roundResult = playRound(humanSelection, computerSelection);
-
-// 	console.log(roundResult);
-// }
-
-// function getFinalResult() {
-// 	let winner = "";
-
-// 	if (userScore === computerScore) {
-// 		console.log(
-// 			`It is a draw! Final score => user: ${userScore} | computer: ${computerScore} `
-// 		);
-// 	}
-
-// 	if (userScore > computerScore) {
-// 		winner = "user";
-// 	} else if (userScore < computerScore) {
-// 		winner = "computer";
-// 	}
-
-// 	if (winner) {
-// 		console.log(
-// 			`The winner is: ${winner} with ${
-// 				winner === "user" ? userScore : computerScore
-// 			} points.`
-// 		);
-// 	}
-// }
-
-// for (let i = 1; i <= numberOfRounds; i++) {
-// 	playGame();
-
-// 	if (i === numberOfRounds) {
-// 		getFinalResult();
-// 	}
-// }
