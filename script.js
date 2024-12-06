@@ -145,6 +145,36 @@ const handleNextRound = () => {
 	});
 };
 
+const handleGameWinner = () => {
+	const gameInfoElement = document.createElement("div");
+	const messageText = document.createElement("h4");
+	const button = document.createElement("button");
+	const lastChild = document.querySelector("#dynamic-block");
+
+	if (userScore === 5 || hostScore === 5) {
+		messageText.textContent =
+			userScore === 5 ? "user wins the game" : "computer wins the game";
+		button.textContent = "play another game";
+		button.addEventListener("click", () => {
+			window.location.reload();
+		});
+	} else {
+		button.textContent = "play again";
+		messageText.textContent = roundMessage;
+	}
+
+	gameInfoElement.classList.add("item-block");
+	gameInfoElement.classList.add("round-info");
+	gameInfoElement.appendChild(messageText);
+	gameInfoElement.appendChild(button);
+	gameContainer.insertBefore(gameInfoElement, lastChild);
+
+	button.addEventListener("click", () => {
+		handleNextRound();
+		isRoundActive = false;
+	});
+};
+
 const playRound = (humanSelection, computerSelection) => {
 	const TIME_IN_MILLISECONDS = 500;
 
@@ -154,24 +184,7 @@ const playRound = (humanSelection, computerSelection) => {
 	setTimeout(() => {
 		handleComputerSelection(computerSelection);
 		handleRoundWinner(humanSelection, computerSelection);
-
-		const gameInfoElement = document.createElement("div");
-		const messageText = document.createElement("h4");
-		const button = document.createElement("button");
-		const lastChild = document.querySelector("#dynamic-block");
-
-		button.textContent = "play again";
-		messageText.textContent = roundMessage;
-		gameInfoElement.classList.add("item-block");
-		gameInfoElement.classList.add("round-info");
-		gameInfoElement.appendChild(messageText);
-		gameInfoElement.appendChild(button);
-		gameContainer.insertBefore(gameInfoElement, lastChild);
-
-		button.addEventListener("click", () => {
-			handleNextRound();
-			isRoundActive = false;
-		});
+		handleGameWinner();
 	}, TIME_IN_MILLISECONDS);
 };
 
